@@ -4,7 +4,8 @@ import { Consumer } from '../../context';
 
 class Search extends Component {
   state = {
-    trackTitle: ''
+    trackTitle: '',
+    countryName: ''
   };
 
   findTrack = (dispatch, e) => {
@@ -23,14 +24,28 @@ class Search extends Component {
           type: 'SEARCH_SONG',
           payload: res.data.message.body.track_list
         });
-
         this.setState({ trackTitle: '' });
+      })
+      .catch(err => console.log(err));
+      axios
+      .get(
+        `https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=20&country=${this.state.countryName}&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`
+      )
+      .then(res => {
+        dispatch({
+          type: 'SEARCH_COUNTRY',
+          payload: res.data.message.body.track_list,
+          countryName: this.state.countryName
+        });
+
+        this.setState({ countryName: '' });
       })
       .catch(err => console.log(err));
   };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state.countryName)
   };
 
   render() {
@@ -46,6 +61,16 @@ class Search extends Component {
               <p className="lead text-center">Get the lyrics for any song</p>
               <form onSubmit={this.findTrack.bind(this, dispatch)}>
                 <div className="form-group">
+
+                <input
+                    type="text"
+                    className="form-control form-control-lg"
+                    placeholder="Country Name Here..."
+                    name="countryName"
+                    value={this.state.countryName}
+                    onChange={this.onChange}
+                  />
+                  <br />
                   <input
                     type="text"
                     className="form-control form-control-lg"

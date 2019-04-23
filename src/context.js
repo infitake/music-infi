@@ -11,6 +11,13 @@ const reducer = (state, action) => {
                 track_list: action.payload,
                 heading:"Searching Songs"
             }
+        case "SEARCH_COUNTRY":
+            return {
+                ...state,
+                track_list: action.payload,
+                heading: "Searched Country",
+                country: action.country
+            }
         default:
             return state;
     }
@@ -20,14 +27,15 @@ const reducer = (state, action) => {
 export class Provider extends Component  {
     state = {
         track_list: [],
-        heading: 'Top Rated Songs',
+        heading: '20 Top Rated Songs',
+        country: 'us',
         dispatch: action => this.setState(state => reducer(state, action))
     }
     //using this we have a reducer from which we can easily called a dispatch function from any consumer component
     //normally we get data using  dispatch from any consumer component
     componentDidMount() {
         axios.get(`
-        https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=20&country=in&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`
+        https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=20&country=${this.state.country}&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`
         )
         .then(res => {
             this.setState({
