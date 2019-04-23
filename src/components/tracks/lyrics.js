@@ -73,7 +73,7 @@ render() {
           </li>
           <li className="list-group-item">
             <strong>Release Date</strong>:{' '}
-            <Moment format="MM/DD/YYYY">{track.first_release_date}</Moment>
+            <Moment format="DD/MM/YYYY">{track.first_release_date}</Moment>
           </li>
         </ul>
       </React.Fragment>

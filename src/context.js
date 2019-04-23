@@ -10,7 +10,7 @@ const reducer = (state, action) => {
                 ...state,
                 track_list: action.payload,
                 heading:"Searching Songs"
-            }
+            }           
         case "SEARCH_COUNTRY":
             return {
                 ...state,

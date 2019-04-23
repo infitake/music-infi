@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Consumer } from '../../context';
+import jsonData from "./NameOfCountry.json"
 
 class Search extends Component {
   state = {
     trackTitle: '',
     countryName: ''
   };
-
   findTrack = (dispatch, e) => {
     e.preventDefault();
-
+    for(var key in jsonData){  
+      if(this.state.countryName === key){
+        this.setState({
+          countryName: jsonData[key]
+        }, this.fetchResponse);
+        break;
+      }
+    }
+    if(this.state.trackTitle.length !== 0){
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/http://api.musixmatch.com/ws/1.1/track.search?q_track=${
@@ -27,11 +35,14 @@ class Search extends Component {
         this.setState({ trackTitle: '' });
       })
       .catch(err => console.log(err));
+    }
+    if(this.state.countryName.length !== 0){
       axios
       .get(
         `https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=20&country=${this.state.countryName}&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`
       )
       .then(res => {
+        
         dispatch({
           type: 'SEARCH_COUNTRY',
           payload: res.data.message.body.track_list,
@@ -41,11 +52,11 @@ class Search extends Component {
         this.setState({ countryName: '' });
       })
       .catch(err => console.log(err));
+    }
   };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state.countryName)
   };
 
   render() {
