@@ -1,3 +1,9 @@
+You can check this app online at:
+https://musicinfi.herokuapp.com/
+
+This provide you a complete running of this website
+It is deployed on Herokuapp .It is very easy way to deployed your project
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
